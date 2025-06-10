@@ -1,33 +1,42 @@
+"use client"
+
 import { useEffect } from "react"
 import L from "leaflet"
 
-// Importar los iconos de Leaflet
+// Importar los iconos de Leaflet manualmente
 import markerIcon from "leaflet/dist/images/marker-icon.png"
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png"
 import markerShadow from "leaflet/dist/images/marker-shadow.png"
 
 const Ubicacion = () => {
   useEffect(() => {
-    // Configurar los iconos de Leaflet
+    // Iconos por defecto de Leaflet
     delete L.Icon.Default.prototype._getIconUrl
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: markerIcon2x,
       iconUrl: markerIcon,
       shadowUrl: markerShadow,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
     })
 
+    // Crear el mapa
     const map = L.map("mi_mapa").setView([7.8892356, -75.6717612], 17)
 
+    // Añadir la capa de tiles
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map)
 
+    // Crear el marcador con las coordenadas exactas
     const marker = L.marker([7.8892356, -75.6717612])
       .addTo(map)
       .bindPopup("Asados Alva-rril<br>Calle 11 con Carrera 9<br>Puerto Libertador, Córdoba")
       .openPopup()
 
-    // Añadir animación al marcador
+    // Opcional: Añadir animación al marcador
     const animateMarker = () => {
       const markerElement = marker.getElement()
       if (markerElement) {
